@@ -1,697 +1,279 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>M4IN SCRIPTS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M4IN Scripts Hub</title>
+
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Share+Tech+Mono&display=swap');
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
 
-  :root {
-    --red: #ff3c3c;
-    --dark-red: #8b0000;
-    --bg: #0a0505;
-    --card: #110808;
-    --card2: #1a0a0a;
-    --border: #3a1010;
-    --text: #f0d0d0;
-    --muted: #8a5a5a;
-  }
+body{
+    background:#0d0d0d;
+    color:white;
+}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+header{
+    background:#111;
+    padding:20px;
+    text-align:center;
+    border-bottom:2px solid #1f1f1f;
+}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Rajdhani', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+header h1{
+    font-size:40px;
+    color:#00ff88;
+}
 
-  /* Animated background grid */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(255,60,60,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,60,60,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
-  }
+header p{
+    color:#999;
+    margin-top:5px;
+}
 
-  /* Overlay screens */
-  .screen {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    background: var(--bg);
-  }
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:30px;
+}
 
-  /* CAPTCHA screen */
-  #captcha-screen {
-    gap: 24px;
-  }
+.script-box{
+    background:#161616;
+    border:1px solid #2a2a2a;
+    padding:20px;
+    border-radius:15px;
+    margin-bottom:25px;
+    transition:0.3s;
+}
 
-  .captcha-box {
-    background: var(--card);
-    border: 1.5px solid var(--border);
-    border-radius: 12px;
-    padding: 36px 44px;
-    text-align: center;
-    max-width: 380px;
-    width: 90%;
-    box-shadow: 0 0 40px rgba(255,60,60,0.08);
-  }
+.script-box:hover{
+    transform:scale(1.02);
+    border-color:#00ff88;
+}
 
-  .captcha-box h2 {
-    font-size: 22px;
-    color: var(--red);
-    letter-spacing: 3px;
-    margin-bottom: 6px;
-  }
+.script-title{
+    font-size:28px;
+    margin-bottom:10px;
+    color:#00ff88;
+}
 
-  .captcha-box p {
-    color: var(--muted);
-    font-size: 14px;
-    margin-bottom: 28px;
-    font-family: 'Share Tech Mono', monospace;
-  }
+.script-desc{
+    color:#aaa;
+    margin-bottom:15px;
+}
 
-  .captcha-check-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background: #1a0a0a;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    padding: 14px 18px;
-    cursor: pointer;
-    transition: border-color 0.2s;
-    user-select: none;
-  }
+button{
+    background:#00ff88;
+    border:none;
+    padding:12px 20px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.3s;
+}
 
-  .captcha-check-row:hover { border-color: var(--red); }
+button:hover{
+    background:#00cc6d;
+}
 
-  .captcha-checkbox {
-    width: 24px;
-    height: 24px;
-    border: 2px solid var(--muted);
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    flex-shrink: 0;
-  }
+.popup{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.8);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+}
 
-  .captcha-checkbox.checked {
-    background: var(--red);
-    border-color: var(--red);
-  }
+.popup-content{
+    background:#161616;
+    padding:30px;
+    border-radius:15px;
+    width:90%;
+    max-width:700px;
+    text-align:center;
+}
 
-  .captcha-checkbox.checked::after {
-    content: '✓';
-    color: white;
-    font-size: 15px;
-    font-weight: bold;
-  }
+textarea{
+    width:100%;
+    height:150px;
+    background:#0d0d0d;
+    color:white;
+    border:1px solid #333;
+    padding:15px;
+    border-radius:10px;
+    margin-top:15px;
+    resize:none;
+}
 
-  .captcha-label {
-    font-size: 16px;
-    color: var(--text);
-    font-weight: 600;
-  }
+.copy-btn{
+    margin-top:15px;
+}
 
-  .captcha-brand {
-    font-size: 10px;
-    color: var(--muted);
-    margin-top: 2px;
-    font-family: 'Share Tech Mono', monospace;
-  }
+.verify-box{
+    margin-top:20px;
+}
 
-  .captcha-logo {
-    margin-left: auto;
-    font-size: 26px;
-  }
+input[type="checkbox"]{
+    transform:scale(1.5);
+    margin-right:10px;
+}
 
-  /* Loading screen */
-  #loading-screen { gap: 18px; }
-
-  .loader-title {
-    font-size: 32px;
-    font-weight: 700;
-    letter-spacing: 6px;
-    color: var(--red);
-    text-shadow: 0 0 20px rgba(255,60,60,0.5);
-  }
-
-  .loader-bar-wrap {
-    width: 280px;
-    height: 4px;
-    background: var(--border);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-
-  .loader-bar {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, var(--dark-red), var(--red));
-    border-radius: 4px;
-    transition: width 0.05s linear;
-    box-shadow: 0 0 10px var(--red);
-  }
-
-  .loader-pct {
-    font-family: 'Share Tech Mono', monospace;
-    color: var(--red);
-    font-size: 13px;
-    letter-spacing: 2px;
-  }
-
-  /* Hub screen */
-  #hub-screen { display: none; }
-
-  .hub-wrap {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    min-height: 100vh;
-    padding: 0 0 60px;
-  }
-
-  /* Header */
-  .hub-header {
-    text-align: center;
-    padding: 48px 20px 32px;
-    position: relative;
-  }
-
-  .hub-header::after {
-    content: '';
-    display: block;
-    width: 180px;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--red), transparent);
-    margin: 16px auto 0;
-  }
-
-  .hub-title {
-    font-size: 48px;
-    font-weight: 700;
-    letter-spacing: 8px;
-    color: var(--red);
-    text-shadow: 0 0 30px rgba(255,60,60,0.4);
-  }
-
-  .hub-sub {
-    font-family: 'Share Tech Mono', monospace;
-    color: var(--muted);
-    font-size: 13px;
-    letter-spacing: 3px;
-    margin-top: 6px;
-  }
-
-  /* Discord badge */
-  .discord-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: #1a0a0a;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    padding: 8px 16px;
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 14px;
-    font-family: 'Share Tech Mono', monospace;
-    text-decoration: none;
-    transition: border-color 0.2s, color 0.2s;
-  }
-
-  .discord-badge:hover { border-color: var(--red); color: var(--red); }
-  .discord-badge span { color: var(--red); font-weight: 700; }
-
-  /* Scripts grid */
-  .scripts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 18px;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-
-  /* Script card */
-  .script-card {
-    background: var(--card);
-    border: 1.5px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-    position: relative;
-  }
-
-  .script-card:hover {
-    border-color: var(--red);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(255,60,60,0.1);
-  }
-
-  .card-top {
-    padding: 18px 18px 14px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .card-icon {
-    font-size: 26px;
-    line-height: 1;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  .card-info { flex: 1; min-width: 0; }
-
-  .card-game {
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--text);
-    letter-spacing: 1px;
-    line-height: 1.2;
-  }
-
-  .card-desc {
-    font-size: 12px;
-    color: var(--muted);
-    font-family: 'Share Tech Mono', monospace;
-    margin-top: 4px;
-  }
-
-  .card-tag {
-    font-size: 10px;
-    padding: 3px 8px;
-    border-radius: 20px;
-    border: 1px solid;
-    font-family: 'Share Tech Mono', monospace;
-    font-weight: 700;
-    letter-spacing: 1px;
-    flex-shrink: 0;
-  }
-
-  .tag-free { color: #4caf50; border-color: #4caf50; background: rgba(76,175,80,0.08); }
-  .tag-paid { color: var(--red); border-color: var(--red); background: rgba(255,60,60,0.08); }
-  .tag-caution { color: #ff9800; border-color: #ff9800; background: rgba(255,152,0,0.08); }
-
-  .card-bottom { padding: 14px 18px; display: flex; flex-direction: column; gap: 10px; }
-
-  /* Copy button */
-  .copy-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-    padding: 11px;
-    background: linear-gradient(135deg, #1a0505, #2a0a0a);
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    color: var(--red);
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-decoration: none;
-  }
-
-  .copy-btn:hover {
-    background: linear-gradient(135deg, #2a0808, #3a1010);
-    border-color: var(--red);
-    box-shadow: 0 0 16px rgba(255,60,60,0.2);
-  }
-
-  .copy-btn.copied {
-    background: linear-gradient(135deg, #0a2a0a, #0f3a0f);
-    border-color: #4caf50;
-    color: #4caf50;
-  }
-
-  .copy-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
-
-  /* Link button (for external links like rekonise) */
-  .link-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-    padding: 11px;
-    background: linear-gradient(135deg, #050a1a, #0a102a);
-    border: 1.5px solid #1a2a4a;
-    border-radius: 8px;
-    color: #6ab0ff;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-decoration: none;
-  }
-
-  .link-btn:hover {
-    border-color: #6ab0ff;
-    box-shadow: 0 0 16px rgba(106,176,255,0.15);
-  }
-
-  /* Gamepass row */
-  .gamepass-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: #120505;
-    border: 1px solid #2a1010;
-    border-radius: 6px;
-    padding: 8px 12px;
-    font-size: 12px;
-    color: var(--muted);
-    font-family: 'Share Tech Mono', monospace;
-  }
-
-  .gamepass-row a {
-    color: var(--red);
-    text-decoration: none;
-    font-weight: 700;
-  }
-
-  .gamepass-row a:hover { text-decoration: underline; }
-
-  /* Section label between cards */
-  .section-divider {
-    grid-column: 1 / -1;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 8px 0 4px;
-  }
-
-  .section-divider span {
-    font-size: 11px;
-    letter-spacing: 4px;
-    color: var(--muted);
-    font-family: 'Share Tech Mono', monospace;
-    white-space: nowrap;
-  }
-
-  .section-divider::before,
-  .section-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  /* Footer */
-  .hub-footer {
-    text-align: center;
-    padding: 40px 20px 10px;
-    color: var(--muted);
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 2px;
-  }
-
-  /* Pulse dot */
-  .pulse-dot {
-    width: 8px;
-    height: 8px;
-    background: var(--red);
-    border-radius: 50%;
-    display: inline-block;
-    animation: pulse 1.5s infinite;
-    box-shadow: 0 0 0 0 rgba(255,60,60,0.4);
-  }
-
-  @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(255,60,60,0.4); }
-    70% { box-shadow: 0 0 0 8px rgba(255,60,60,0); }
-    100% { box-shadow: 0 0 0 0 rgba(255,60,60,0); }
-  }
-
-  .hidden { display: none !important; }
+.footer{
+    text-align:center;
+    padding:30px;
+    color:#666;
+}
 </style>
 </head>
 <body>
 
-<!-- CAPTCHA SCREEN -->
-<div class="screen" id="captcha-screen">
-  <div class="captcha-box">
-    <h2>M4IN SCRIPTS</h2>
-    <p>verify you are human to continue</p>
-    <div class="captcha-check-row" id="captcha-row" onclick="doCaptcha()">
-      <div class="captcha-checkbox" id="captcha-cb"></div>
-      <div>
-        <div class="captcha-label">I'm not a robot</div>
-        <div class="captcha-brand">reCAPTCHA · m4in_scripts</div>
-      </div>
-      <div class="captcha-logo">🛡️</div>
+<header>
+    <h1>M4IN Scripts Hub</h1>
+    <p>Universal Roblox Scripts Collection</p>
+</header>
+
+<div class="container">
+
+    <div class="script-box">
+        <div class="script-title">💈 Be A Hair?</div>
+        <div class="script-desc">Pastebin Script</div>
+        <button onclick="openScript('https://pastebin.com/raw/DiivrieP')">Open Script</button>
     </div>
-  </div>
+
+    <div class="script-box">
+        <div class="script-title">Universal AutoClicker</div>
+        <div class="script-desc">Mighty AutoClicker</div>
+        <button onclick="openScript('https://rekonise.com/mighty-autoclicker-9cn91')">Open Script</button>
+    </div>
+
+    <div class="script-box">
+        <div class="script-title">UGC Sniper</div>
+        <div class="script-desc">
+            Pass required to buy automatically.<br><br>
+            DM if something wrong: m4in_scripts<br><br>
+            Pass:
+            <a style="color:#00ff88;" href="https://www.roblox.com/game-pass/894907564/15" target="_blank">
+            Buy Pass
+            </a>
+        </div>
+        <button onclick="openScript('https://rekonise.com/ugc-sniper-script-5gnre')">Open Script</button>
+    </div>
+
+    <div class="script-box">
+        <div class="script-title">UGC Steal Points OP</div>
+        <div class="script-desc">Universal Script</div>
+        <button onclick="openScript('https://rekonise.com/ugc-steal-points-op-axf7n')">Open Script</button>
+    </div>
+
+    <div class="script-box">
+        <div class="script-title">Universal Instant UGC</div>
+        <div class="script-desc">Pastefy Script</div>
+        <button onclick="openScript('https://pastefy.app/7lcXOSoA/raw')">Open Script</button>
+    </div>
+
+    <div class="script-box">
+        <div class="script-title">Fake Purchase (🚨 MAY NOT WORK)</div>
+        <div class="script-desc">Ragdoll Rumble</div>
+        <button onclick="openScript('https://pastefy.app/GHzjwKju/raw')">Open Script</button>
+    </div>
+
 </div>
 
-<!-- LOADING SCREEN -->
-<div class="screen hidden" id="loading-screen">
-  <div class="loader-title">M4IN SCRIPTS</div>
-  <div class="loader-bar-wrap"><div class="loader-bar" id="loader-bar"></div></div>
-  <div class="loader-pct" id="loader-pct">0%</div>
+<div class="popup" id="popup">
+    <div class="popup-content">
+
+        <h2>Verification Required</h2>
+
+        <div class="verify-box">
+            <label>
+                <input type="checkbox" id="verifyCheck">
+                I'm not a robot
+            </label>
+        </div>
+
+        <textarea id="scriptArea" readonly></textarea>
+
+        <button class="copy-btn" onclick="copyScript()">Copy Script</button>
+
+        <br><br>
+
+        <button onclick="closePopup()">Close</button>
+
+    </div>
 </div>
 
-<!-- HUB SCREEN -->
-<div class="screen hidden" id="hub-screen" style="position:relative;overflow-y:auto;align-items:flex-start;">
-  <div class="hub-wrap">
-    <div class="hub-header">
-      <div class="hub-title">M4IN SCRIPTS</div>
-      <div class="hub-sub"><span class="pulse-dot"></span> &nbsp; SCRIPT HUB — ALL GAMES</div>
-      <a class="discord-badge" href="https://discord.com" target="_blank">
-        💬 Issues? DM &nbsp;<span>m4in_scripts</span>&nbsp; on Discord
-      </a>
-    </div>
-
-    <div class="scripts-grid" id="scripts-grid"></div>
-
-    <div class="hub-footer">
-      m4in_scripts &nbsp;·&nbsp; use at your own risk &nbsp;·&nbsp; not affiliated with roblox
-    </div>
-  </div>
+<div class="footer">
+    © 2026 M4IN Scripts Hub
 </div>
 
 <script>
-// ─── SCRIPT DATA ───────────────────────────────────────────────
-const scripts = [
-  {
-    icon: "💈",
-    game: "Be A Hair?",
-    desc: "Auto script for Be A Hair",
-    tag: "free",
-    type: "copy",
-    content: `-- Be A Hair Script\nloadstring(game:HttpGet("https://pastebin.com/raw/DiivrieP"))()`,
-    pasteUrl: "https://pastebin.com/DiivrieP"
-  },
-  {
-    icon: "🖱️",
-    game: "Universal AutoClicker",
-    desc: "Works on any Roblox game",
-    tag: "free",
-    type: "link",
-    url: "https://rekonise.com/mighty-autoclicker-9cn91"
-  },
-  {
-    icon: "🎯",
-    game: "UGC Sniper",
-    desc: "Snipe UGC items automatically",
-    tag: "paid",
-    type: "link",
-    url: "https://rekonise.com/ugc-sniper-script-5gnre",
-    gamepass: {
-      label: "Buy pass to get whitelisted automatically",
-      url: "https://www.roblox.com/game-pass/894907564/15",
-      price: "15 R$"
-    }
-  },
-  {
-    icon: "💰",
-    game: "UGC Steal Points",
-    desc: "OP steal points — Universal",
-    tag: "free",
-    type: "link",
-    url: "https://rekonise.com/ugc-steal-points-op-axf7n"
-  },
-  {
-    icon: "⚡",
-    game: "Universal Instant UGC",
-    desc: "Instant UGC loop — Universal",
-    tag: "free",
-    type: "copy",
-    content: `loadstring(game:HttpGet("https://pastefy.app/7lcXOSoA/raw"))()`,
-    pasteUrl: "https://pastefy.app/7lcXOSoA"
-  },
-  {
-    icon: "🚨",
-    game: "Fake Purchase",
-    desc: "May not work on all games",
-    tag: "caution",
-    type: "copy",
-    content: `loadstring(game:HttpGet("https://pastefy.app/GHzjwKju/raw"))()`,
-    pasteUrl: "https://pastefy.app/GHzjwKju",
-    note: "⚠️ May not work depending on game updates"
-  },
-  {
-    icon: "💥",
-    game: "Ragdoll Rumble",
-    desc: "Script for Ragdoll Rumble",
-    tag: "free",
-    type: "copy",
-    content: `loadstring(game:HttpGet("https://pastefy.app/GHzjwKju/raw"))()`,
-    pasteUrl: "https://pastefy.app/GHzjwKju"
-  }
-];
 
-// ─── BUILD CARDS ───────────────────────────────────────────────
-function buildCards() {
-  const grid = document.getElementById("scripts-grid");
+let currentScript = "";
 
-  scripts.forEach((s, i) => {
-    const card = document.createElement("div");
-    card.className = "script-card";
+async function openScript(link){
 
-    const tagClass = s.tag === "free" ? "tag-free" : s.tag === "paid" ? "tag-paid" : "tag-caution";
-    const tagText = s.tag === "free" ? "FREE" : s.tag === "paid" ? "PAID" : "CAUTION";
+    document.getElementById("popup").style.display = "flex";
+    document.getElementById("scriptArea").value = "Verify first...";
+    currentScript = link;
 
-    let bottomHTML = "";
-
-    if (s.type === "copy") {
-      bottomHTML += `
-        <button class="copy-btn" id="copybtn-${i}" onclick="copyScript(${i})">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-          </svg>
-          COPY SCRIPT
-        </button>`;
-      if (s.pasteUrl) {
-        bottomHTML += `
-          <a class="link-btn" href="${s.pasteUrl}" target="_blank">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
-              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-            </svg>
-            VIEW SOURCE
-          </a>`;
-      }
-    } else if (s.type === "link") {
-      bottomHTML += `
-        <a class="link-btn" href="${s.url}" target="_blank">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
-            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-          </svg>
-          GET SCRIPT
-        </a>`;
-    }
-
-    if (s.gamepass) {
-      bottomHTML += `
-        <div class="gamepass-row">
-          🔑 <a href="${s.gamepass.url}" target="_blank">Buy gamepass (${s.gamepass.price})</a> → auto whitelisted
-        </div>`;
-    }
-
-    if (s.note) {
-      bottomHTML += `<div class="gamepass-row">⚠️ ${s.note}</div>`;
-    }
-
-    card.innerHTML = `
-      <div class="card-top">
-        <div class="card-icon">${s.icon}</div>
-        <div class="card-info">
-          <div class="card-game">${s.game}</div>
-          <div class="card-desc">${s.desc}</div>
-        </div>
-        <div class="card-tag ${tagClass}">${tagText}</div>
-      </div>
-      <div class="card-bottom">${bottomHTML}</div>`;
-
-    grid.appendChild(card);
-  });
 }
 
-function copyScript(i) {
-  const s = scripts[i];
-  navigator.clipboard.writeText(s.content).then(() => {
-    const btn = document.getElementById("copybtn-" + i);
-    btn.classList.add("copied");
-    btn.innerHTML = `
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
-        <polyline points="20 6 9 17 4 12"/>
-      </svg>
-      COPIED!`;
-    setTimeout(() => {
-      btn.classList.remove("copied");
-      btn.innerHTML = `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-        </svg>
-        COPY SCRIPT`;
-    }, 2000);
-  });
-}
+document.getElementById("verifyCheck").addEventListener("change", async function(){
 
-// ─── CAPTCHA ───────────────────────────────────────────────────
-function doCaptcha() {
-  const cb = document.getElementById("captcha-cb");
-  if (cb.classList.contains("checked")) return;
-  cb.classList.add("checked");
-  setTimeout(startLoading, 600);
-}
+    if(this.checked){
 
-// ─── LOADING ───────────────────────────────────────────────────
-function startLoading() {
-  document.getElementById("captcha-screen").classList.add("hidden");
-  const ls = document.getElementById("loading-screen");
-  ls.classList.remove("hidden");
+        try{
 
-  const bar = document.getElementById("loader-bar");
-  const pct = document.getElementById("loader-pct");
-  let p = 0;
+            const response = await fetch(currentScript);
+            const text = await response.text();
 
-  const iv = setInterval(() => {
-    p += Math.random() * 4 + 1;
-    if (p >= 100) {
-      p = 100;
-      clearInterval(iv);
-      bar.style.width = "100%";
-      pct.textContent = "100%";
-      setTimeout(showHub, 400);
-    } else {
-      bar.style.width = p + "%";
-      pct.textContent = Math.floor(p) + "%";
+            document.getElementById("scriptArea").value = text;
+
+        }catch{
+
+            document.getElementById("scriptArea").value = "Failed to load script.";
+
+        }
+
+    }else{
+
+        document.getElementById("scriptArea").value = "Verify first...";
+
     }
-  }, 40);
+
+});
+
+function copyScript(){
+
+    const area = document.getElementById("scriptArea");
+
+    area.select();
+    area.setSelectionRange(0,99999);
+
+    navigator.clipboard.writeText(area.value);
+
+    alert("Script copied!");
+
 }
 
-function showHub() {
-  document.getElementById("loading-screen").classList.add("hidden");
-  const hub = document.getElementById("hub-screen");
-  hub.classList.remove("hidden");
-  hub.style.display = "flex";
-  buildCards();
+function closePopup(){
+
+    document.getElementById("popup").style.display = "none";
+
+    document.getElementById("verifyCheck").checked = false;
+
 }
+
 </script>
+
 </body>
 </html>
